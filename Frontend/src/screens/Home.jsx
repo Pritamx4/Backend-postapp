@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
-import Logo from "../components/Logo";
 
 const Home = () => {
   return (
     <main className="min-h-screen bg-black px-4 py-5 text-white sm:px-6 lg:px-8">
       <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-6xl flex-col">
         <header className="flex items-center justify-between">
-          <Logo />
           <Link
             to="/feed"
             className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-100 transition hover:border-zinc-400"

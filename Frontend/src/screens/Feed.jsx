@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { getApiUrl } from "../config/api";
-import Logo from "../components/Logo";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -37,7 +36,6 @@ const Feed = () => {
     <main className="min-h-screen bg-black px-3 py-4 text-white sm:px-5 lg:px-8">
       <div className="mx-auto w-full max-w-7xl">
         <header className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <Logo />
           <Link
             to="/create-post"
             className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
