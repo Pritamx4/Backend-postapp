@@ -1,5 +1,6 @@
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
+import { getApiUrl } from "../config/api";
 
 
 const CreatePost = () => {
@@ -8,7 +9,7 @@ const CreatePost = () => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    axios.post(`${import.meta.env.VITE_API_URL}/create-post`, formData)
+    axios.post(getApiUrl("/create-post"), formData)
     .then((res) => {
       console.log(res);
       navigate("/feed"); // Navigate back to the feed page
