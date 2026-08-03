@@ -7,6 +7,7 @@ const Feed = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [menuOpenId, setMenuOpenId] = useState(null); // track which post's menu is open
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -31,6 +32,16 @@ const Feed = () => {
 
     fetchPosts();
   }, []);
+
+  const handleDelete = async (_id) => {
+    console.log("Deleting:", _id);
+    try {
+      await axios.delete(getApiUrl(`/delete-post/${_id}`));
+      setPosts((prev) => prev.filter((post) => post._id !== _id));
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-black px-3 py-4 text-white sm:px-5 lg:px-8">
@@ -61,7 +72,7 @@ const Feed = () => {
             {posts.map((post) => (
               <article
                 key={post._id}
-                className="masonry-card overflow-hidden rounded-lg bg-zinc-900 shadow-md shadow-black/30"
+                className="relative masonry-card overflow-hidden rounded-lg bg-zinc-900 shadow-md shadow-black/30"
               >
                 <img
                   src={post.image}
@@ -72,6 +83,34 @@ const Feed = () => {
                   <p className="px-3 py-3 text-center text-sm leading-5 text-zinc-100 sm:text-base">
                     {post.caption}
                   </p>
+                )}
+
+                {/* 3-dots menu button */}
+                <button
+                  onClick={() =>
+                    setMenuOpenId(menuOpenId === post._id ? null : post._id)
+                  }
+                  className="absolute bottom-1 right-3   text-zinc-400"
+                >
+                  ⋮
+                </button>
+
+                {/* Dropdown menu */}
+                {menuOpenId === post._id && (
+                  <div className="absolute bottom-12 right-3 w-32 rounded-md bg-zinc-800 shadow-lg">
+                    <Link
+                      to={`/update-post/${post._id}`}
+                      className="block px-3 py-2 text-sm hover:bg-zinc-700"
+                    >
+                      Update
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(post._id)}
+                      className="block w-full px-3 py-2 text-left text-sm hover:bg-zinc-700"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 )}
               </article>
             ))}
