@@ -1,30 +1,41 @@
 import { Link } from "react-router-dom";
-
+import Logo from "../components/Logo";
 
 const Home = () => {
   return (
-    <div className="h-screen relative flex items-center bg-black text-white">
-      <div className="absolute left-0 top-0 p-4 w-40 h-40">
-        <h1 id="logo" className="h-full w-full">
-          Post App
-        </h1>
-      </div>
-      <div className=" h-96 w-full flex flex-col justify-center items-center">
-        <h1 className="text-6xl">Welcome to the Post App</h1>
-        <div className="flex gap-4 mt-4">
-        <Link to="/create-post"><button 
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-          >
-            Create Post
-          </button></Link>
-          <Link to="/feed"><button 
-          className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+    <main className="min-h-screen bg-black px-4 py-5 text-white sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-6xl flex-col">
+        <header className="flex items-center justify-between">
+          <Logo />
+          <Link
+            to="/feed"
+            className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-100 transition hover:border-zinc-400"
           >
             View Posts
-          </button></Link>
-        </div>
+          </Link>
+        </header>
+
+        <section className="flex flex-1 flex-col items-center justify-center py-16 text-center sm:py-20">
+          <h2 className="max-w-4xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+            Welcome to the Post App
+          </h2>
+          <div className="mt-6 flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
+            <Link
+              to="/create-post"
+              className="rounded-lg bg-blue-500 px-5 py-3 text-center font-semibold text-white transition hover:bg-blue-600"
+            >
+              Create Post
+            </Link>
+            <Link
+              to="/feed"
+              className="rounded-lg bg-zinc-800 px-5 py-3 text-center font-semibold text-white transition hover:bg-zinc-700"
+            >
+              View Posts
+            </Link>
+          </div>
+        </section>
       </div>
-    </div>
+    </main>
   );
 };
 

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-// import { useNavigate } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { getApiUrl } from "../config/api";
+import Logo from "../components/Logo";
 
 const Feed = () => {
   const [posts, setPosts] = useState([]);
@@ -33,32 +34,59 @@ const Feed = () => {
   }, []);
 
   return (
-    <div className="flex flex-col p-4 min-h-screen bg-black text-white">
-      <h1 className="text-3xl font-bold mb-4">Posts</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {isLoading ? (
-          <h1 className="text-center text-2xl">Loading posts...</h1>
-        ) : error ? (
-          <h1 className="text-center text-2xl">{error}</h1>
-        ) : posts.length > 0 ? (
-          posts.map((post) => (
-            <div
-              key={post._id}
-              className="bg-zinc-800 p-4 rounded-lg shadow-md"
-            >
-              <img
-                src={post.image}
-                alt="Post"
-                className="w-full h-auto rounded-lg mb-2"
-              />
-              <p className="text-center">{post.caption}</p>
-            </div>
-          ))
-        ) : (
-          <h1 className="text-center text-2xl">No posts available.</h1>
+    <main className="min-h-screen bg-black px-3 py-4 text-white sm:px-5 lg:px-8">
+      <div className="mx-auto w-full max-w-7xl">
+        <header className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <Logo />
+          <Link
+            to="/create-post"
+            className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
+          >
+            Create Post
+          </Link>
+        </header>
+
+        <h1 className="mb-5 text-2xl font-bold sm:text-3xl">Posts</h1>
+
+        {isLoading && (
+          <p className="py-16 text-center text-xl text-zinc-300">
+            Loading posts...
+          </p>
+        )}
+
+        {!isLoading && error && (
+          <p className="py-16 text-center text-xl text-zinc-300">{error}</p>
+        )}
+
+        {!isLoading && !error && posts.length > 0 && (
+          <div className="masonry-feed">
+            {posts.map((post) => (
+              <article
+                key={post._id}
+                className="masonry-card overflow-hidden rounded-lg bg-zinc-900 shadow-md shadow-black/30"
+              >
+                <img
+                  src={post.image}
+                  alt={post.caption || "Post"}
+                  className="block h-auto w-full object-contain"
+                />
+                {post.caption && (
+                  <p className="px-3 py-3 text-center text-sm leading-5 text-zinc-100 sm:text-base">
+                    {post.caption}
+                  </p>
+                )}
+              </article>
+            ))}
+          </div>
+        )}
+
+        {!isLoading && !error && posts.length === 0 && (
+          <p className="py-16 text-center text-xl text-zinc-300">
+            No posts available.
+          </p>
         )}
       </div>
-    </div>
+    </main>
   );
 };
 
