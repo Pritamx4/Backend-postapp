@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <main className="min-h-screen bg-black px-4 py-5 text-white sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-black relative px-4 py-5 text-white sm:px-6 lg:px-8">
+      <img className="h-16 w-16 m-2 absolute top-0 left-0" src="./public/logo.png" alt="logo" />
       <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-6xl flex-col">
         <header className="flex items-center justify-between">
           <Link
