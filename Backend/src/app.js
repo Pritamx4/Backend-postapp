@@ -1,11 +1,12 @@
 const express = require("express");
 const postModel = require("./models/post.model");
 const multer = require("multer");
-const uploadFile = require("./services/storage.service");
+const {uploadFile , deleteFile} = require("./services/storage.service"); //call both func.
 
 const app = express();
 app.use(express.json());
 const upload = multer({ storage: multer.memoryStorage() });
+
 
 // post api
 app.post("/create-post", upload.single("image"), async (req, res) => {
@@ -17,6 +18,7 @@ app.post("/create-post", upload.single("image"), async (req, res) => {
     image: result.url,
     // Add other post fields as needed
     caption: req.body.caption,
+    imageFileId: result.fileId, // Store the ImageKit file ID for future reference
   });
   return res.status(201).json({
     message: "Post created successfully",
@@ -34,7 +36,7 @@ app.get("/posts", async (req, res) => {
 });
 
 // update api
-app.patch("/update-post/:id", upload.single("image"), async (req, res) => {
+app.patch("/update-post/:id", async (req, res) => {
   const postId = req.params.id;
   const post = await postModel.findById(postId);
   if (!post) {
@@ -44,7 +46,7 @@ app.patch("/update-post/:id", upload.single("image"), async (req, res) => {
   }
 
   // Update the post with the new data
-  Object.assign(post, req.body);
+  post.caption = req.body.caption || post.caption;
   await post.save();
 
   return res.status(200).json({
@@ -56,12 +58,16 @@ app.patch("/update-post/:id", upload.single("image"), async (req, res) => {
 // delete api
 app.delete("/delete-post/:id", async (req, res) => {
   const postId = req.params.id;
-  const post = await postModel.findByIdAndDelete(postId);
+  const post = await postModel.findById(postId);
   if (!post) {
     return res.status(404).json({
       message: "Post not found",
     });
   }
+  console.log(post)
+  console.log(post.imageFileId)
+  await deleteFile(post.imageFileId);// Delete the image from ImageKit
+  await postModel.findByIdAndDelete(postId);// Delete the post from MongoDB
   return res.status(200).json({
     message: "Post deleted successfully",
   });
