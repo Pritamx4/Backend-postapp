@@ -3,15 +3,12 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <main className="min-h-screen bg-black relative px-4 py-5 text-white sm:px-6 lg:px-8">
-      <img className="h-16 w-16 m-2 absolute top-0 left-0" src="./public/logo.png" alt="logo" />
+      <img className="h-16 w-16 m-2 absolute top-0 left-0" src="./public/image.png" alt="logo" />
       <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-6xl flex-col">
-        <header className="flex items-center justify-between">
-          <Link
-            to="/feed"
-            className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-100 transition hover:border-zinc-400"
-          >
-            View Posts
-          </Link>
+        <header className="flex items-start justify-start">
+          <h1 className="text-3xl font-semibold sm:text-4xl lg:text-5xl">
+            Post App
+          </h1>
         </header>
 
         <section className="flex flex-1 flex-col items-center justify-center py-16 text-center sm:py-20">
