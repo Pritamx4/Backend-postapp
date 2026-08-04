@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const Home = () => {
   return (
     <main className="min-h-screen bg-black relative px-4 py-5 text-white sm:px-6 lg:px-8">
-      <img className="h-16 w-16 m-2 absolute top-0 left-0" src="./public/image.png" alt="logo" />
+      <img className="m-2 absolute left-0 top-0 h-16 w-16" src="/image.png" alt="logo" />
       <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-6xl flex-col">
         <header className="flex items-start justify-start">
           <h1 className="text-3xl font-semibold sm:text-4xl lg:text-5xl">
