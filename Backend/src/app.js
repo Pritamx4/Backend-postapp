@@ -205,7 +205,12 @@ app.patch("/users/:id/password", async (req, res) => {
  * /api/auth/register
  */
 
+
+// Register api
 app.use("/api/auth", authRoutes);
+
+
+
 
 
 module.exports = app;
