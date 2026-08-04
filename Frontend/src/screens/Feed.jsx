@@ -43,6 +43,27 @@ const Feed = () => {
     }
   };
 
+  const [updatePostId, setUpdatePostId] = useState(null);
+  const [updatedCaptions, setUpdatedCaptions] = useState("");
+
+  const handleUpdate = async (_id) => {
+    try {
+      await axios.patch(getApiUrl(`/update-post/${_id}`), {
+        caption: updatedCaptions,
+      });
+      setPosts((prev) =>
+        prev.map((post) =>
+          post._id === _id ? { ...post, caption: updatedCaptions } : post,
+        ),
+      );
+      setUpdatePostId(null);
+      setUpdatedCaptions("");
+      setMenuOpenId(null); // Close the menu after updating
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <main className="min-h-screen bg-black px-3 py-4 text-white sm:px-5 lg:px-8">
       <div className="mx-auto w-full max-w-7xl">
@@ -80,9 +101,38 @@ const Feed = () => {
                   className="block h-auto w-full object-contain"
                 />
                 {post.caption && (
-                  <p className="px-3 py-3 text-center text-sm leading-5 text-zinc-100 sm:text-base">
-                    {post.caption}
-                  </p>
+                  updatePostId === post._id ? (
+                    <div className="p-3">
+                      <input
+                        value={updatedCaptions}
+                        onChange={(e) => setUpdatedCaptions(e.target.value)}
+                        className="w-full rounded bg-zinc-800 p-2 text-white"
+                      />
+
+                      <div className="mt-2 flex gap-2">
+                        <button
+                          onClick={() => handleUpdate(post._id)}
+                          className="rounded bg-green-600 px-3 py-1"
+                        >
+                          Save
+                        </button>
+
+                        <button
+                          onClick={() => {
+                            setUpdatePostId(null);
+                            setUpdatedCaptions("");
+                          }}
+                          className="rounded bg-red-600 px-3 py-1"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="px-3 py-3 text-center text-sm leading-5 text-zinc-100 sm:text-base">
+                      {post.caption}
+                    </p>
+                  )
                 )}
 
                 {/* 3-dots menu button */}
@@ -90,7 +140,7 @@ const Feed = () => {
                   onClick={() =>
                     setMenuOpenId(menuOpenId === post._id ? null : post._id)
                   }
-                  className="absolute bottom-1 right-3   text-zinc-400"
+                  className="absolute bottom-1 right-3 p-2 rounded  hover:bg-zinc-600 text-zinc-400"
                 >
                   ⋮
                 </button>
@@ -98,12 +148,16 @@ const Feed = () => {
                 {/* Dropdown menu */}
                 {menuOpenId === post._id && (
                   <div className="absolute bottom-12 right-3 w-32 rounded-md bg-zinc-800 shadow-lg">
-                    <Link
-                      to={`/update-post/${post._id}`}
-                      className="block px-3 py-2 text-sm hover:bg-zinc-700"
+                    <button
+                      onClick={() => {
+                        setUpdatePostId(post._id);
+                        setUpdatedCaptions(post.caption || "");
+                        setMenuOpenId(null); // Close the menu after clicking update
+                      }}
+                      className="block w-full px-3 py-2 text-left text-sm hover:bg-zinc-700"
                     >
                       Update
-                    </Link>
+                    </button>
                     <button
                       onClick={() => handleDelete(post._id)}
                       className="block w-full px-3 py-2 text-left text-sm hover:bg-zinc-700"
