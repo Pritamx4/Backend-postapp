@@ -6,12 +6,12 @@ const connectDB = require("./src/db/db");
 const PORT = process.env.PORT || 5000;
 
 connectDB()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error("Failed to connect to DB:", err);
+        process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error("Failed to connect to DB:", err);
-    process.exit(1);
-  });
