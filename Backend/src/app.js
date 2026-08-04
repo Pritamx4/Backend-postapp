@@ -4,10 +4,14 @@ const multer = require("multer");
 const { uploadFile, deleteFile } = require("./services/storage.service"); //call both func.
 const cors = require("cors");
 const userModel = require("./models/user.model");
+const authRoutes = require("./routes/auth.routes");
+const cookieParser = require("cookie-parser");
+
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 const upload = multer({ storage: multer.memoryStorage() });
 
 
@@ -124,22 +128,6 @@ app.delete("/delete-post/:id", async (req, res) => {
 
 
 
-// users
-app.post("/users", async (req, res) => {
-    const users = await userModel.create({
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-    });
-    res.status(200).json({
-        message: "User created successfully",
-        users: {
-            name: users.name,
-            email: users.email,
-            createdAt: users.createdAt,
-        },
-    });
-});
 
 // get user
 app.get("/users", async (req, res) => {
@@ -207,5 +195,17 @@ app.patch("/users/:id/password", async (req, res) => {
         message: "User password updated successfully",
     });
 });
+
+
+// auth routes
+
+/**
+ * ye jo apis hai in sab me hame ek prefix lagana pdega 
+ * /api/auth naam ka tabhi ham inhe access kr paenge wrna nhi
+ * /api/auth/register
+ */
+
+app.use("/api/auth", authRoutes);
+
 
 module.exports = app;
