@@ -10,6 +10,7 @@ async function uploadFile(buffer) {
     const result = await imagekit.files.upload({
         file: buffer.toString("base64"),
         fileName: "image.jpg",
+        folder: "posts",
     });
     return result;
 }

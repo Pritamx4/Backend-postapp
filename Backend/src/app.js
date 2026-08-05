@@ -6,13 +6,13 @@ const cors = require("cors");
 const userModel = require("./models/user.model");
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const postRoutes = require("./routes/post.routes");
 const cookieParser = require("cookie-parser");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
-const upload = multer({ storage: multer.memoryStorage() });
 
 // post APIs
 
@@ -25,32 +25,32 @@ app.get("/health", (req, res) => {
 });
 
 // post api
-app.post("/create-post", upload.single("image"), async (req, res) => {
-    try {
-        if (!req.file) {
-            return res.status(400).json({
-                message: "Image is required",
-            });
-        }
+// app.post("/create-post", upload.single("image"), async (req, res) => {
+//     try {
+//         if (!req.file) {
+//             return res.status(400).json({
+//                 message: "Image is required",
+//             });
+//         }
 
-        const result = await uploadFile(req.file.buffer);
+//         const result = await uploadFile(req.file.buffer);
 
-        const post = await postModel.create({
-            image: result.url,
-            caption: req.body.caption,
-            imageFileId: result.fileId,
-        });
-        return res.status(201).json({
-            message: "Post created successfully",
-            post,
-        });
-    } catch (err) {
-        console.error("Failed to create post:", err);
-        return res.status(500).json({
-            message: "Failed to create post",
-        });
-    }
-});
+//         const post = await postModel.create({
+//             image: result.url,
+//             caption: req.body.caption,
+//             imageFileId: result.fileId,
+//         });
+//         return res.status(201).json({
+//             message: "Post created successfully",
+//             post,
+//         });
+//     } catch (err) {
+//         console.error("Failed to create post:", err);
+//         return res.status(500).json({
+//             message: "Failed to create post",
+//         });
+//     }
+// });
 
 // get api
 app.get("/posts", async (req, res) => {
@@ -136,7 +136,11 @@ app.delete("/delete-post/:id", async (req, res) => {
 
 // auth routes
 app.use("/api/auth", authRoutes);
+
 // user routes
 app.use("/api/users", userRoutes);
+
+// post routes
+app.use("/api/posts", postRoutes);
 
 module.exports = app;
