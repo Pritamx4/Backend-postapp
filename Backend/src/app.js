@@ -5,8 +5,8 @@ const { uploadFile, deleteFile } = require("./services/storage.service"); //call
 const cors = require("cors");
 const userModel = require("./models/user.model");
 const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
 const cookieParser = require("cookie-parser");
-
 
 const app = express();
 app.use(cors());
@@ -14,10 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 const upload = multer({ storage: multer.memoryStorage() });
 
-
 // post APIs
-
-
 
 app.get("/", (req, res) => {
     res.status(200).json({ message: "Post API is running" });
@@ -122,95 +119,24 @@ app.delete("/delete-post/:id", async (req, res) => {
     }
 });
 
-
-
-// users APIs
-
-
-
-
-// get user
-app.get("/users", async (req, res) => {
-    const users = await userModel.find({}, { password: 0 }); // Exclude password field from the response
-    res.status(200).json({
-        message: "Users fetched successfully",
-        users: users,
-    });
-});
-
-// get user by id
-app.get("/users/:id", async (req, res) => {
-    const user = await userModel.findById(req.params.id, { password: 0 }); // Exclude password field from the response
-    res.status(200).json({
-        message: "User fetched successfully",
-        user: user,
-    });
-});
-
-// update user
-app.patch("/users/:id", async (req, res) => {
-    const user = await userModel.findById(req.params.id);
-    if (!user) {
-        return res.status(404).json({
-            message: "User not found",
-        });
-    }
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    await user.save();
-    res.status(200).json({
-        message: "User updated successfully",
-        user: {
-            name: user.name,
-            email: user.email,
-        },
-    });
-});
-
-// delete user
-app.delete("/users/:id", async (req, res) => {
-    const user = await userModel.findById(req.params.id);
-    if (!user) {
-        return res.status(404).json({
-            message: "User not found",
-        });
-    }
-    await userModel.findByIdAndDelete(req.params.id);
-    res.status(200).json({
-        message: "User deleted successfully",
-    });
-});
-
-// update user password
-app.patch("/users/:id/password", async (req, res) => {
-    const user = await userModel.findById(req.params.id);
-    if (!user) {
-        return res.status(404).json({
-            message: "User not found",
-        });
-    }
-    user.password = req.body.password;
-    await user.save();
-    res.status(200).json({
-        message: "User password updated successfully",
-    });
-});
-
-
-// auth routes
-
 /**
- * ye jo apis hai in sab me hame ek prefix lagana pdega 
- * /api/auth naam ka tabhi ham inhe access kr paenge wrna nhi
+ * ye jo apis hai in sab me hame ek prefix lagana
+ * agar hamne auth.routes me jo apis banai hai unhe access krna hai to hame
+ * "/api/auth" naam ka prefix lagana pdega
  * /api/auth/register
+ * /api/auth/login
+ * /api/auth/logout
+ * or agar hamne user.routes me jo apis banai hai unhe access krna hai to hame
+ * "/api/users" naam ka prefix lagana pdega
+ * /api/users/me
+ * /api/users/me/password
+ * /api/users/me
+ * /api/users/username/:username
  */
 
-
-// Register api
+// auth routes
 app.use("/api/auth", authRoutes);
-
-
-
-
+// user routes
+app.use("/api/users", userRoutes);
 
 module.exports = app;

@@ -22,6 +22,7 @@ async function registerUser(req, res) {
     const token = jwt.sign(
         {
             userId: user._id,
+            email: user.email,
         },
         process.env.JWT_SECRET,
         {
@@ -51,7 +52,7 @@ async function loginUser(req, res) {
 
     const user = await userModel.findOne({
         $or: [{ username }, { email }],
-    });
+    }).select("+password"); // Include password field in the query result
 
     if (!user) {
         return res.status(401).json({
@@ -61,25 +62,29 @@ async function loginUser(req, res) {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-
     if (!isPasswordValid) {
         return res.status(401).json({
             message: "Invalid Credentials",
         });
     }
 
-    const token = jwt.sign({
-        userId: user._id,
-    }, process.env.JWT_SECRET, {
-        expiresIn: "24h",
-    });
+    const token = jwt.sign(
+        {
+            userId: user._id,
+            email: user.email,
+        },
+        process.env.JWT_SECRET,
+        {
+            expiresIn: "24h",
+        },
+    );
 
     res.cookie("token", token);
 
     res.status(200).json({
         message: "Login successful",
         user: {
-            name: user.name,
+            username: user.username,
             email: user.email,
         },
     });
@@ -97,3 +102,10 @@ module.exports = {
     loginUser,
     logoutUser,
 };
+
+/**
+ * these are the routes for auth related operations
+ * post /register
+ * post /login
+ * post /logout
+ */
