@@ -8,7 +8,7 @@ const CreatePost = () => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
-    axios.post(getApiUrl("/create-post"), formData).then((res) => {
+    axios.post(getApiUrl("/api/posts"), formData).then((res) => {
       console.log(res);
       navigate("/feed"); // Navigate back to the feed page
     });
