@@ -6,6 +6,7 @@ const cors = require("cors");
 const userModel = require("./models/user.model");
 const authRoutes = require("./routes/auth.routes");
 const userRoutes = require("./routes/user.routes");
+const postRoutes = require("./routes/post.routes");
 const cookieParser = require("cookie-parser");
 
 const app = express();
@@ -136,7 +137,11 @@ app.delete("/delete-post/:id", async (req, res) => {
 
 // auth routes
 app.use("/api/auth", authRoutes);
+
 // user routes
 app.use("/api/users", userRoutes);
+
+// post routes
+app.use("/api/posts", postRoutes);
 
 module.exports = app;
