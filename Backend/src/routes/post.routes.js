@@ -21,10 +21,10 @@ const router = express.Router();
  */
 
 router.post("/", authMiddleware.verifyJWT, upload.single("image"), postController.createPost);
-router.get("/", authMiddleware.verifyJWT, postController.getAllPosts); //currently i add middleware,in future i will remove it
+router.get("/", postController.getAllPosts); //currently i add middleware,in future i will remove it
 router.get("/me/",authMiddleware.verifyJWT,postController.getPostsByUser,);
-router.get("/user/:username/",authMiddleware.verifyJWT,postController.getPostsByUsername,);
-router.get("/:id", authMiddleware.verifyJWT, postController.getPostById); //currently i add middleware,in future i will remove it
+router.get("/user/:username/",postController.getPostsByUsername,);
+router.get("/:id", postController.getPostById); //currently i add middleware,in future i will remove it
 router.patch("/:id", authMiddleware.verifyJWT, postController.updatePost);
 router.delete("/:id", authMiddleware.verifyJWT, postController.deletePost);
 
