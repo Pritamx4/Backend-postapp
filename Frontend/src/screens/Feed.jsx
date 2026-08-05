@@ -12,7 +12,7 @@ const Feed = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get(getApiUrl("/posts"));
+        const res = await axios.get(getApiUrl("/api/posts"));
         const nextPosts = Array.isArray(res.data?.posts)
           ? res.data.posts
           : Array.isArray(res.data)
@@ -36,7 +36,8 @@ const Feed = () => {
   const handleDelete = async (_id) => {
     console.log("Deleting:", _id);
     try {
-      await axios.delete(getApiUrl(`/delete-post/${_id}`));
+      await axios.delete(getApiUrl(`/api/posts/${_id}`),
+        { withCredentials: true });
       setPosts((prev) => prev.filter((post) => post._id !== _id));
     } catch (err) {
       console.error(err);
@@ -48,9 +49,9 @@ const Feed = () => {
 
   const handleUpdate = async (_id) => {
     try {
-      await axios.patch(getApiUrl(`/update-post/${_id}`), {
+      await axios.patch(getApiUrl(`/api/posts/${_id}`), {
         caption: updatedCaptions,
-      });
+      }, { withCredentials: true });
       setPosts((prev) =>
         prev.map((post) =>
           post._id === _id ? { ...post, caption: updatedCaptions } : post,
