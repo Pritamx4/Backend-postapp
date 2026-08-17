@@ -1,38 +1,22 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-  return (
-    <main className="min-h-screen bg-black relative px-4 py-5 text-white sm:px-6 lg:px-8">
-      <img className="m-2 absolute left-0 top-0 h-16 w-16" src="/image.png" alt="logo" />
-      <div className="mx-auto flex min-h-[calc(100vh-2.5rem)] w-full max-w-6xl flex-col">
-        <header className="flex items-start justify-start">
-          <h1 className="text-3xl font-semibold sm:text-4xl lg:text-5xl">
-            Post App
-          </h1>
-        </header>
-
-        <section className="flex flex-1 flex-col items-center justify-center py-16 text-center sm:py-20">
-          <h2 className="max-w-4xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
-            Welcome to the Post App
-          </h2>
-          <div className="mt-6 flex w-full max-w-sm flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center">
-            <Link
-              to="/create-post"
-              className="rounded-lg bg-blue-500 px-5 py-3 text-center font-semibold text-white transition hover:bg-blue-600"
-            >
-              Create Post
-            </Link>
-            <Link
-              to="/feed"
-              className="rounded-lg bg-zinc-800 px-5 py-3 text-center font-semibold text-white transition hover:bg-zinc-700"
-            >
-              View Posts
-            </Link>
-          </div>
-        </section>
-      </div>
-    </main>
-  );
+    const navigate = useNavigate();
+    return (
+        <div className="flex items-center justify-center h-screen bg-black text-white">
+            <div className="h-16 w-16 absolute top-0 left-0 bg-amber-200 flex items-center justify-center rounded-full border-2 border-gray-400">
+                <h1>Logo</h1>
+            </div>
+            <div className="flex flex-col items-center justify-center gap-4">
+                <h1 className="text-2xl font-bold">Welcome to Post app</h1>
+                <button className="bg-amber-200 text-black px-4 py-2 rounded-md"
+                onClick={() => navigate("/register")}>Create Account</button>
+                <button className="bg-gray-200 text-black px-4 py-2 rounded-md"
+                onClick={() => navigate("/login")}>Login</button>
+            </div>
+        </div>
+    );
 };
 
 export default Home;
