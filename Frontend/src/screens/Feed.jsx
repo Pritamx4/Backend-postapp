@@ -96,6 +96,7 @@ const Feed = () => {
                 key={post._id}
                 className="relative masonry-card overflow-hidden rounded-lg bg-zinc-900 shadow-md shadow-black/30"
               >
+              {/* Post content */}
                 <img
                   src={post.image}
                   alt={post.caption || "Post"}
