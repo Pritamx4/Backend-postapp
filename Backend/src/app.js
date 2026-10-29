@@ -11,10 +11,17 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const app = express();
-app.use(cors( {
-    origin: process.env.FRONTEND_URL, // Replace with your frontend URL
-    credentials: true, // Allow cookies to be sent
-}));
+const allowedOrigins = [
+    "http://localhost:5173", // Vite local dev server
+    process.env.FRONTEND_URL, // Deployed Render URL
+].filter(Boolean);
+
+app.use(
+    cors({
+        origin: allowedOrigins,
+        credentials: true, // Cookie/JWT session allow karne ke liye
+    })
+);
 app.use(express.json());
 app.use(cookieParser());
 
