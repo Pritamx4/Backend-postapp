@@ -1,5 +1,7 @@
 const express = require("express");
 const userModel = require("../models/user.model");
+const postModel = require("../models/post.model");
+const { deleteFile } = require("../services/storage.service");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 
@@ -128,6 +130,19 @@ async function deleteUserProfile(req, res) {
             message: "Invalid Credentials",
         });
     }
+    // Cleanup user's posts and their images from storage
+    const userPosts = await postModel.find({ author: userId });
+    for (const post of userPosts) {
+        if (post.imageFileId) {
+            try {
+                await deleteFile(post.imageFileId);
+            } catch (err) {
+                console.error("Failed to delete post image from storage:", err);
+            }
+        }
+    }
+    await postModel.deleteMany({ author: userId });
+
     await userModel.findByIdAndDelete(userId);
 
     res.clearCookie("token"); // Clear the JWT cookie

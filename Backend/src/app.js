@@ -52,4 +52,13 @@ app.use("/api/users", userRoutes);
 // post routes
 app.use("/api/posts", postRoutes);
 
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error("Global Error Handler:", err.stack || err);
+    const statusCode = err.status || err.statusCode || 500;
+    res.status(statusCode).json({
+        message: err.message || "Internal Server Error",
+    });
+});
+
 module.exports = app;
