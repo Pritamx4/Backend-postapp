@@ -305,53 +305,7 @@ const Feed = () => {
                                             </div>
                                         </div>
                                     )}
-        {!isLoading && !error && posts.length > 0 && (
-          <div className="masonry-feed">
-            {posts.map((post) => (
-              <article
-                key={post._id}
-                className="relative masonry-card overflow-hidden rounded-xl bg-[#111113] border border-zinc-800/80 hover:border-zinc-700 transition-colors shadow-none"
-              >
-              {/* Post content */}
-                <img
-                  src={post.image}
-                  alt={post.caption || "Post"}
-                  className="block h-auto w-full object-contain bg-zinc-950"
-                  loading="lazy"
-                />
-                {post.caption && (
-                  updatePostId === post._id ? (
-                    <div className="p-3 bg-[#18181b]">
-                      <input
-                        value={updatedCaptions}
-                        onChange={(e) => setUpdatedCaptions(e.target.value)}
-                        className="w-full rounded-lg bg-zinc-900 border border-zinc-700 p-2 text-xs text-white outline-none focus:border-zinc-400"
-                        placeholder="Edit caption..."
-                      />
-                      <div className="mt-2 flex gap-2">
-                        <button
-                          onClick={() => handleUpdate(post._id)}
-                          className="rounded-lg bg-white text-black px-3 py-1 text-xs font-semibold hover:bg-zinc-200 transition-colors"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => {
-                            setUpdatePostId(null);
-                            setUpdatedCaptions("");
-                          }}
-                          className="rounded-lg bg-[#27272a] text-zinc-300 px-3 py-1 text-xs hover:bg-zinc-700 transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <p className="px-3.5 py-3 text-sm text-zinc-200">
-                      {post.caption}
-                    </p>
-                  )
-                )}
+
 
                                     {/* 3-dot menu button */}
                                     <button
