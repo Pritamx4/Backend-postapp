@@ -25,6 +25,3 @@ dist-ssr
 
 *.excalidraw
 .env
-
-*.excalidraw
-.env 
