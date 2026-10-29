@@ -21,7 +21,6 @@ const getBentoSpan = (index) => {
 const Home = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
-    const [loadingPosts, setLoadingPosts] = useState(true);
 
     // If logged in → go to feed
     useEffect(() => {
@@ -38,8 +37,7 @@ const Home = () => {
                     : Array.isArray(res.data) ? res.data : [];
                 setPosts(p.slice(0, 7)); // max 7 for bento
             })
-            .catch(() => setPosts([]))
-            .finally(() => setLoadingPosts(false));
+            .catch(() => setPosts([]));
     }, []);
 
     const hasPosts = posts.length > 0;
