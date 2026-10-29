@@ -22,6 +22,7 @@ async function createPost(req, res) {
         imageFileId: result.fileId,
         author: req.userId, // Assuming the user ID is stored in req.userId after authentication
     });
+    await post.populate("author", "username");
     res.status(201).json({
         message: "Post created successfully",
         post,
@@ -29,7 +30,7 @@ async function createPost(req, res) {
 }
 
 async function getAllPosts(req, res) {
-    const posts = await postModel.find().populate("author", "username");
+    const posts = await postModel.find().sort({ createdAt: -1 }).populate("author", "username");
     res.status(200).json({
         posts,
     });

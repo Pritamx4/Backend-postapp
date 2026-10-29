@@ -57,6 +57,21 @@ const getBentoSpan = (index) => {
     return BENTO_CYCLE[index % BENTO_CYCLE.length];
 };
 
+
+const getAuthorName = (author) => {
+    if (!author) return "curator";
+    if (typeof author === "string") return author;
+    if (typeof author === "object") {
+        return author.username || author.name || "curator";
+    }
+    return "curator";
+};
+
+const getAuthorInitial = (author) => {
+    const name = getAuthorName(author);
+    return name ? name.charAt(0).toUpperCase() : "C";
+};
+
 const Feed = () => {
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -369,13 +384,28 @@ const Feed = () => {
                                     >
                                         {posts[0].caption || "Featured Composition"}
                                     </h2>
-                                    {posts[0].author?.username && (
-                                        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
-                                            <span style={{ fontSize: 10, fontFamily: "monospace", color: "#888888" }}>
-                                                Captured by @{posts[0].author.username}
-                                            </span>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6 }}>
+                                        <div
+                                            style={{
+                                                width: 18,
+                                                height: 18,
+                                                borderRadius: "50%",
+                                                backgroundColor: "#222222",
+                                                border: "1px solid #333333",
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                fontSize: 9,
+                                                fontWeight: 700,
+                                                color: "#EDEDED",
+                                            }}
+                                        >
+                                            {getAuthorInitial(posts[0].author)}
                                         </div>
-                                    )}
+                                        <span style={{ fontSize: 11, fontFamily: "monospace", color: "#AAAAAA" }}>
+                                            Captured by @{getAuthorName(posts[0].author)}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -448,6 +478,9 @@ const Feed = () => {
                                             <p style={{ fontSize: 13, color: "#EDEDED", margin: 0, fontWeight: 600 }}>
                                                 {posts[1].caption || "Secondary Exhibition"}
                                             </p>
+                                            <span style={{ fontSize: 9, fontFamily: "monospace", color: "#888888", display: "block", marginTop: 2 }}>
+                                                @{getAuthorName(posts[1].author)}
+                                            </span>
                                         </div>
                                     </div>
 
@@ -629,14 +662,62 @@ const Feed = () => {
                                             loading="lazy"
                                         />
 
-                                        {/* Caption overlay (hover) */}
-                                        {post.caption && updatePostId !== post._id && (
+                                        {/* Author watermark chip (always visible on photo) */}
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                top: 8,
+                                                left: 8,
+                                                zIndex: 10,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 5,
+                                                padding: "3px 8px",
+                                                backgroundColor: "rgba(10, 10, 10, 0.72)",
+                                                backdropFilter: "blur(6px)",
+                                                border: "1px solid rgba(255, 255, 255, 0.1)",
+                                                borderRadius: 0,
+                                                pointerEvents: "none",
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    width: 14,
+                                                    height: 14,
+                                                    borderRadius: "50%",
+                                                    backgroundColor: "#222222",
+                                                    border: "1px solid #333333",
+                                                    display: "inline-flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    fontSize: 8,
+                                                    fontWeight: 700,
+                                                    textTransform: "uppercase",
+                                                    color: "#EDEDED",
+                                                }}
+                                            >
+                                                {getAuthorInitial(post.author)}
+                                            </span>
+                                            <span
+                                                style={{
+                                                    fontSize: 9,
+                                                    fontFamily: "monospace",
+                                                    color: "#D4D4D4",
+                                                    letterSpacing: "0.04em",
+                                                }}
+                                            >
+                                                @{getAuthorName(post.author)}
+                                            </span>
+                                        </div>
+
+                                        {/* Caption & details overlay (hover) */}
+                                        {updatePostId !== post._id && (
                                             <div
                                                 className="caption-overlay"
                                                 style={{
                                                     position: "absolute",
                                                     inset: "0 0 0 0",
-                                                    background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0) 55%)",
+                                                    background: "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.2) 55%, transparent 100%)",
                                                     padding: "14px",
                                                     display: "flex",
                                                     flexDirection: "column",
@@ -646,25 +727,31 @@ const Feed = () => {
                                                     pointerEvents: "none",
                                                 }}
                                             >
-                                                <p
-                                                    style={{
-                                                        fontSize: 12,
-                                                        color: "#EDEDED",
-                                                        lineHeight: 1.4,
-                                                        margin: 0,
-                                                        display: "-webkit-box",
-                                                        WebkitLineClamp: 2,
-                                                        WebkitBoxOrient: "vertical",
-                                                        overflow: "hidden",
-                                                    }}
-                                                >
-                                                    {post.caption}
-                                                </p>
-                                                {post.author?.username && (
-                                                    <span style={{ fontSize: 9, fontFamily: "monospace", color: "#888888", marginTop: 4 }}>
-                                                        — {post.author.username}
-                                                    </span>
+                                                {post.caption && (
+                                                    <p
+                                                        style={{
+                                                            fontSize: 12,
+                                                            color: "#EDEDED",
+                                                            lineHeight: 1.4,
+                                                            margin: "0 0 4px",
+                                                            display: "-webkit-box",
+                                                            WebkitLineClamp: 2,
+                                                            WebkitBoxOrient: "vertical",
+                                                            overflow: "hidden",
+                                                            fontWeight: 500,
+                                                        }}
+                                                    >
+                                                        {post.caption}
+                                                    </p>
                                                 )}
+                                                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
+                                                    <span style={{ fontSize: 9, fontFamily: "monospace", color: "#888888" }}>
+                                                        Captured by
+                                                    </span>
+                                                    <span style={{ fontSize: 10, fontFamily: "monospace", color: "#EDEDED", fontWeight: 600 }}>
+                                                        @{getAuthorName(post.author)}
+                                                    </span>
+                                                </div>
                                             </div>
                                         )}
 
