@@ -8,11 +8,8 @@ import Auth from "./screens/Auth";
 const App = () => {
     return (
         <Router>
-            <div className="min-h-screen bg-black text-white flex flex-col md:flex-row">
-                {/* Desktop: Left Docked Sidebar | Mobile: Bottom Docked Bar */}
+            <div className="min-h-screen flex flex-col md:flex-row" style={{ backgroundColor: "#0A0A0A", color: "#EDEDED" }}>
                 <Navigation />
-
-                {/* Main Content Viewport */}
                 <div className="flex-1 min-w-0 pb-16 md:pb-0 overflow-y-auto">
                     <Routes>
                         <Route path="/" element={<Home />} />
