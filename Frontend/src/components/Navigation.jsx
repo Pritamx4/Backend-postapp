@@ -40,6 +40,7 @@ const Navigation = () => {
     };
 
     const isActive = (path) => location.pathname === path;
+    const isExploreActive = location.pathname === "/" || location.pathname === "/feed";
 
     return (
         <>
@@ -83,7 +84,7 @@ const Navigation = () => {
                             to="/feed"
                             className="flex items-center gap-3 px-3.5 py-2.5 text-xs transition-all duration-150 text-decoration-none"
                             style={
-                                isActive("/feed")
+                                isExploreActive
                                     ? {
                                           backgroundColor: "#121212",
                                           color: "#EDEDED",
@@ -102,14 +103,14 @@ const Navigation = () => {
                                       }
                             }
                             onMouseEnter={e => {
-                                if (!isActive("/feed")) {
+                                if (!isExploreActive) {
                                     e.currentTarget.style.color = "#EDEDED";
                                     e.currentTarget.style.backgroundColor = "#0F0F0F";
                                     e.currentTarget.style.borderLeftColor = "#333333";
                                 }
                             }}
                             onMouseLeave={e => {
-                                if (!isActive("/feed")) {
+                                if (!isExploreActive) {
                                     e.currentTarget.style.color = "#777777";
                                     e.currentTarget.style.backgroundColor = "transparent";
                                     e.currentTarget.style.borderLeftColor = "transparent";
@@ -245,7 +246,7 @@ const Navigation = () => {
                 {/* Explore */}
                 <Link
                     to="/feed"
-                    className={`flex flex-col items-center gap-1 w-14 py-1 transition-colors text-decoration-none ${isActive("/feed") ? "text-[#EDEDED]" : "text-[#555555]"}`}
+                    className={`flex flex-col items-center gap-1 w-14 py-1 transition-colors text-decoration-none ${isExploreActive ? "text-[#EDEDED]" : "text-[#555555]"}`}
                 >
                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round">
                         <rect width="7" height="7" x="3" y="3" />

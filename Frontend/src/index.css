@@ -2,6 +2,12 @@
 
 @layer base {
   :root {
+    /* Render.com style: Neo-grotesque Swiss UI (PP Neue Montreal vibe) + Geometric display + Precision Mono */
+    --font-sans: 'Instrument Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-display: 'Space Grotesk', 'Instrument Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    --font-masthead: 'Manufacturing Consent', serif;
+
     --bg:       #0A0A0A;
     --surface:  #111111;
     --surface2: #1A1A1A;
@@ -16,7 +22,31 @@
   html {
     background-color: var(--bg);
     color: var(--text);
+    font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body, input, textarea, select, button {
+    font-family: var(--font-sans);
+    letter-spacing: -0.01em;
+  }
+
+  /* Universal high-end Mono override for all technical tags & inline monospace styles */
+  code, kbd, samp, pre, .font-mono, [style*="monospace"] {
+    font-family: var(--font-mono) !important;
+  }
+
+  /* Blackletter / Gothic Newspaper Masthead font for main headline only */
+  .font-masthead {
+    font-family: var(--font-masthead) !important;
+    font-weight: 400;
+  }
+
+  h1:not(.font-masthead), h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
   }
 }
 
