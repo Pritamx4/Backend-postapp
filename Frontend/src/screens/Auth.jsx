@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getApiUrl } from "../config/api";
 
 const Auth = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const tabParam = searchParams.get("tab");
-    const [isLogin, setIsLogin] = useState(true);
+
+    // Derived state from URL search params (prevents cascading re-render warnings)
+    const isLogin = searchParams.get("tab") !== "register";
+
     const [formData, setFormData] = useState({
         username: "",
         email: "",
@@ -17,14 +19,6 @@ const Auth = () => {
     const [isError, setIsError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    useEffect(() => {
-        const tab = searchParams.get("tab");
-        if (tab === "register") {
-            setIsLogin(false);
-        } else {
-            setIsLogin(true);
-        }
-    }, [searchParams]);
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -34,7 +28,6 @@ const Auth = () => {
     };
 
     const handleTabChange = (loginState) => {
-        setIsLogin(loginState);
         setSearchParams({ tab: loginState ? "login" : "register" });
         setMessage("");
         setIsError(false);
@@ -81,6 +74,7 @@ const Auth = () => {
                 if (data.token) {
                     localStorage.setItem("token", data.token);
                 }
+                localStorage.setItem("isLoggedIn", "true");
                 setMessage("Login successful! Redirecting to feed...");
                 setTimeout(() => {
                     navigate("/feed");
@@ -88,7 +82,8 @@ const Auth = () => {
             } else {
                 console.log("Register Success:", data);
                 setMessage("Account created! Please log in.");
-                setIsLogin(true);
+                // Switch to login tab
+                setSearchParams({ tab: "login" });
             }
         } catch (error) {
             console.error("Auth Error:", error);
@@ -139,7 +134,7 @@ const Auth = () => {
                 </div>
 
                 {/* Minimal Underline Tabs */}
-                {/* <div className="flex border-b border-zinc-800 mb-6">
+                <div className="flex border-b border-zinc-800 mb-6">
                     <button
                         type="button"
                         onClick={() => handleTabChange(true)}
@@ -164,7 +159,7 @@ const Auth = () => {
                             <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-white rounded-full" />
                         )}
                     </button>
-                </div> */}
+                </div>
 
                 {/* Status Message */}
                 {message && (
