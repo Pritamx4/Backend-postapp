@@ -156,16 +156,15 @@ const Feed = () => {
                             Curated Exhibition & Visual Archive
                         </span>
                         <h1
+                            className="font-masthead"
                             style={{
-                                fontSize: isMobile ? 22 : 28,
-                                fontWeight: 700,
-                                letterSpacing: "-0.03em",
+                                fontSize: isMobile ? 26 : 34,
                                 color: "#EDEDED",
                                 margin: 0,
+                                lineHeight: 1.1,
                             }}
                         >
-                            
-                            Public Gallery
+                            The Visual Archive
                         </h1>
                     </div>
 
