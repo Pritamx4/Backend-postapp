@@ -1,10 +1,10 @@
-import { useState ,useEffect } from "react";
-import { useNavigate , useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getApiUrl } from "../config/api";
 
 const Auth = () => {
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams(); 
+    const [searchParams, setSearchParams] = useSearchParams();
     const tabParam = searchParams.get("tab");
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ const Auth = () => {
     const [isError, setIsError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-     useEffect(() => {
+    useEffect(() => {
         const tab = searchParams.get("tab");
         if (tab === "register") {
             setIsLogin(false);
@@ -35,7 +35,7 @@ const Auth = () => {
 
     const handleTabChange = (loginState) => {
         setIsLogin(loginState);
-          setSearchParams({ tab: loginState ? "login" : "register" });
+        setSearchParams({ tab: loginState ? "login" : "register" });
         setMessage("");
         setIsError(false);
     };
@@ -53,7 +53,9 @@ const Auth = () => {
         const payload = isLogin
             ? {
                   username: formData.username,
-                  email: formData.username.includes("@") ? formData.username : undefined,
+                  email: formData.username.includes("@")
+                      ? formData.username
+                      : undefined,
                   password: formData.password,
               }
             : formData;
@@ -91,7 +93,9 @@ const Auth = () => {
         } catch (error) {
             console.error("Auth Error:", error);
             setIsError(true);
-            setMessage(error.message || "Something went wrong. Please try again.");
+            setMessage(
+                error.message || "Something went wrong. Please try again.",
+            );
         } finally {
             setLoading(false);
         }
@@ -112,7 +116,14 @@ const Auth = () => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         >
-                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                            <rect
+                                width="18"
+                                height="18"
+                                x="3"
+                                y="3"
+                                rx="2"
+                                ry="2"
+                            />
                             <circle cx="9" cy="9" r="2" />
                             <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                         </svg>
@@ -182,7 +193,11 @@ const Auth = () => {
                             id="username"
                             type="text"
                             name="username"
-                            placeholder={isLogin ? "Enter your username or email" : "Choose a username"}
+                            placeholder={
+                                isLogin
+                                    ? "Enter your username or email"
+                                    : "Choose a username"
+                            }
                             value={formData.username}
                             onChange={handleChange}
                             required
@@ -274,15 +289,17 @@ const Auth = () => {
                         {loading
                             ? "Please wait..."
                             : isLogin
-                            ? "Sign In"
-                            : "Create Account"}
+                              ? "Sign In"
+                              : "Create Account"}
                     </button>
                 </form>
 
                 {/* Footer Switcher */}
                 <div className="mt-6 pt-4 border-t border-zinc-800/80 text-center">
                     <p className="text-xs text-zinc-500">
-                        {isLogin ? "Don't have an account? " : "Already have an account? "}
+                        {isLogin
+                            ? "Don't have an account? "
+                            : "Already have an account? "}
                         <button
                             type="button"
                             onClick={() => handleTabChange(!isLogin)}

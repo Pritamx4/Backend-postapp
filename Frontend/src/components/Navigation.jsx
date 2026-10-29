@@ -19,6 +19,7 @@ const Navigation = () => {
                     localStorage.setItem("isLoggedIn", "true");
                 }
             } catch (err) {
+                console.error("Error fetching user:", err);
                 if (isMounted) {
                     setUser(null);
                     localStorage.removeItem("isLoggedIn");
@@ -71,7 +72,14 @@ const Navigation = () => {
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                             >
-                                <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                                <rect
+                                    width="18"
+                                    height="18"
+                                    x="3"
+                                    y="3"
+                                    rx="2"
+                                    ry="2"
+                                />
                                 <circle cx="9" cy="9" r="2" />
                                 <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                             </svg>
@@ -107,9 +115,27 @@ const Navigation = () => {
                                 strokeLinejoin="round"
                             >
                                 <rect width="7" height="7" x="3" y="3" rx="1" />
-                                <rect width="7" height="7" x="14" y="3" rx="1" />
-                                <rect width="7" height="7" x="14" y="14" rx="1" />
-                                <rect width="7" height="7" x="3" y="14" rx="1" />
+                                <rect
+                                    width="7"
+                                    height="7"
+                                    x="14"
+                                    y="3"
+                                    rx="1"
+                                />
+                                <rect
+                                    width="7"
+                                    height="7"
+                                    x="14"
+                                    y="14"
+                                    rx="1"
+                                />
+                                <rect
+                                    width="7"
+                                    height="7"
+                                    x="3"
+                                    y="14"
+                                    rx="1"
+                                />
                             </svg>
                             <span>Explore Feed</span>
                             {isActive("/feed") && (
@@ -150,7 +176,9 @@ const Navigation = () => {
                             {/* Profile Info */}
                             <div className="flex items-center gap-2.5 min-w-0">
                                 <div className="w-8 h-8 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-xs font-mono font-semibold text-white shrink-0 uppercase">
-                                    {user.username ? user.username.slice(0, 2) : "U"}
+                                    {user.username
+                                        ? user.username.slice(0, 2)
+                                        : "U"}
                                 </div>
                                 <div className="flex flex-col min-w-0">
                                     <span className="text-xs font-medium text-white truncate">
@@ -208,7 +236,10 @@ const Navigation = () => {
             {/* 2. MOBILE: TOP HEADER BRAND STRIP (< md)                 */}
             {/* ======================================================== */}
             <div className="md:hidden sticky top-0 z-40 w-full h-14 bg-black border-b border-zinc-800/80 px-4 flex items-center justify-between">
-                <Link to={user ? "/feed" : "/"} className="flex items-center gap-2">
+                <Link
+                    to={user ? "/feed" : "/"}
+                    className="flex items-center gap-2"
+                >
                     <div className="w-7 h-7 rounded-lg bg-[#111113] border border-zinc-800 flex items-center justify-center text-white">
                         <svg
                             className="w-3.5 h-3.5 text-white"
@@ -219,7 +250,14 @@ const Navigation = () => {
                             strokeLinecap="round"
                             strokeLinejoin="round"
                         >
-                            <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+                            <rect
+                                width="18"
+                                height="18"
+                                x="3"
+                                y="3"
+                                rx="2"
+                                ry="2"
+                            />
                             <circle cx="9" cy="9" r="2" />
                             <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                         </svg>
@@ -251,7 +289,9 @@ const Navigation = () => {
                 <Link
                     to="/feed"
                     className={`flex flex-col items-center justify-center gap-1 w-16 py-1 transition-colors ${
-                        isActive("/feed") ? "text-white" : "text-zinc-500 hover:text-zinc-300"
+                        isActive("/feed")
+                            ? "text-white"
+                            : "text-zinc-500 hover:text-zinc-300"
                     }`}
                 >
                     <div className="relative">
@@ -273,7 +313,9 @@ const Navigation = () => {
                             <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-white" />
                         )}
                     </div>
-                    <span className="text-[10px] font-medium tracking-tight">Explore</span>
+                    <span className="text-[10px] font-medium tracking-tight">
+                        Explore
+                    </span>
                 </Link>
 
                 {/* Center Create Post (+) */}
@@ -302,7 +344,7 @@ const Navigation = () => {
                         <div className="w-6 h-6 rounded-full bg-zinc-800 border border-zinc-700 flex items-center justify-center text-[10px] font-mono text-white uppercase">
                             {user.username ? user.username.slice(0, 2) : "U"}
                         </div>
-                        <span className="text-[10px] font-mono text-zinc-400 truncate max-w-[60px]">
+                        <span className="text-[10px] font-mono text-zinc-400 truncate max-w-15">
                             {user.username}
                         </span>
                     </div>
