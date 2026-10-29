@@ -88,7 +88,7 @@ const Auth = () => {
 
     return (
         <div className="min-h-screen w-full bg-black text-white flex items-center justify-center p-4 antialiased">
-            <div className="w-full max-w-[380px] bg-[#111113] border border-zinc-800/80 rounded-2xl p-7 sm:p-8 flex flex-col">
+            <div className="w-full max-w-95 bg-[#111113] border border-zinc-800/80 rounded-2xl p-7 sm:p-8 flex flex-col">
                 {/* Brand / Logo */}
                 <div className="flex flex-col items-center text-center mb-6">
                     <div className="w-11 h-11 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center mb-3">
