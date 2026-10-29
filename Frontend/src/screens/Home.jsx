@@ -22,13 +22,13 @@ const Home = () => {
                 <h1 className="text-2xl font-bold">Welcome to Post app</h1>
                 <button
                     className="bg-amber-200 text-black px-4 py-2 rounded-md"
-                    onClick={() => navigate("/register")}
+                    onClick={() => navigate("/auth?tab=register")}
                 >
                     Create Account
                 </button>
                 <button
                     className="bg-gray-200 text-black px-4 py-2 rounded-md"
-                    onClick={() => navigate("/login")}
+                    onClick={() => navigate("/auth?tab=login")}
                 >
                     Login
                 </button>

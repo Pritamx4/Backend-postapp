@@ -1,9 +1,11 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState ,useEffect } from "react";
+import { useNavigate , useSearchParams } from "react-router-dom";
 import { getApiUrl } from "../config/api";
 
 const Auth = () => {
     const navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams(); 
+    const tabParam = searchParams.get("tab");
     const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
         username: "",
@@ -15,6 +17,14 @@ const Auth = () => {
     const [isError, setIsError] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
+     useEffect(() => {
+        const tab = searchParams.get("tab");
+        if (tab === "register") {
+            setIsLogin(false);
+        } else {
+            setIsLogin(true);
+        }
+    }, [searchParams]);
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -25,6 +35,7 @@ const Auth = () => {
 
     const handleTabChange = (loginState) => {
         setIsLogin(loginState);
+          setSearchParams({ tab: loginState ? "login" : "register" });
         setMessage("");
         setIsError(false);
     };
