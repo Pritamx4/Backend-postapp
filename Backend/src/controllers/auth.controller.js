@@ -6,12 +6,14 @@ const bcrypt = require("bcrypt");
 async function registerUser(req, res) {
     const { username, email, password } = req.body;
 
-    const isUserAlreadyExists = await userModel.findOne({ email });
-    if (isUserAlreadyExists) {
-        return res.status(409).json({
-            message: "User already exists",
-        });
-    }
+    const isUserAlreadyExists = await userModel.findOne({
+    $or: [{ email }, { username }]
+});
+if (isUserAlreadyExists) {
+    return res.status(409).json({
+        message: isUserAlreadyExists.email === email ? "Email already registered" : "Username already taken",
+    });
+}
 
     const user = await userModel.create({
         username,
@@ -30,7 +32,11 @@ async function registerUser(req, res) {
         },
     );
 
-    res.cookie("token", token);
+    res.cookie("token", token, {    
+    httpOnly: true,    
+    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    sameSite: "lax",
+});
 
     res.status(201).json({
         message: "User registered successfully",
@@ -79,7 +85,11 @@ async function loginUser(req, res) {
         },
     );
 
-    res.cookie("token", token);
+    res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        sameSite: "lax",
+    });
 
     res.status(200).json({
         message: "Login successful",

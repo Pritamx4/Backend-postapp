@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { getApiUrl } from "../config/api";
 
@@ -7,7 +6,7 @@ const Feed = () => {
   const [posts, setPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [menuOpenId, setMenuOpenId] = useState(null); // track which post's menu is open
+  const [menuOpenId, setMenuOpenId] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -34,10 +33,8 @@ const Feed = () => {
   }, []);
 
   const handleDelete = async (_id) => {
-    console.log("Deleting:", _id);
     try {
-      await axios.delete(getApiUrl(`/api/posts/${_id}`),
-        { withCredentials: true });
+      await axios.delete(getApiUrl(`/api/posts/${_id}`));
       setPosts((prev) => prev.filter((post) => post._id !== _id));
     } catch (err) {
       console.error(err);
@@ -51,42 +48,46 @@ const Feed = () => {
     try {
       await axios.patch(getApiUrl(`/api/posts/${_id}`), {
         caption: updatedCaptions,
-      }, { withCredentials: true });
+      });
       setPosts((prev) =>
         prev.map((post) =>
-          post._id === _id ? { ...post, caption: updatedCaptions } : post,
-        ),
+          post._id === _id ? { ...post, caption: updatedCaptions } : post
+        )
       );
       setUpdatePostId(null);
       setUpdatedCaptions("");
-      setMenuOpenId(null); // Close the menu after updating
+      setMenuOpenId(null);
     } catch (err) {
       console.error(err);
     }
   };
 
   return (
-    <main className="min-h-screen bg-black px-3 py-4 text-white sm:px-5 lg:px-8">
+    <main className="min-h-[calc(100vh-4rem)] bg-black px-4 py-6 text-white sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-7xl">
-        <header className="mb-5 flex flex-wrap items-center justify-between gap-3">
-          <Link
-            to="/create-post"
-            className="rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-600"
-          >
-            Create Post
-          </Link>
-        </header>
-
-        <h1 className="mb-5 text-2xl font-bold sm:text-3xl">Posts</h1>
+        <div className="mb-6 flex items-baseline justify-between border-b border-zinc-900 pb-4">
+          <div>
+            <span className="text-[11px] font-mono tracking-wider text-zinc-500 uppercase block mb-0.5">
+              Community Gallery
+            </span>
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+              Public Feed
+            </h1>
+          </div>
+          <span className="text-xs font-mono text-zinc-500">
+            {posts.length} {posts.length === 1 ? "Post" : "Posts"}
+          </span>
+        </div>
 
         {isLoading && (
-          <p className="py-16 text-center text-xl text-zinc-300">
-            Loading posts...
-          </p>
+          <div className="py-24 text-center">
+            <div className="inline-block w-6 h-6 border-2 border-white/20 border-t-white rounded-full animate-spin mb-3" />
+            <p className="text-xs font-mono text-zinc-500">Loading gallery...</p>
+          </div>
         )}
 
         {!isLoading && error && (
-          <p className="py-16 text-center text-xl text-zinc-300">{error}</p>
+          <p className="py-16 text-center text-sm font-mono text-zinc-400">{error}</p>
         )}
 
         {!isLoading && !error && posts.length > 0 && (
@@ -94,44 +95,44 @@ const Feed = () => {
             {posts.map((post) => (
               <article
                 key={post._id}
-                className="relative masonry-card overflow-hidden rounded-lg bg-zinc-900 shadow-md shadow-black/30"
+                className="relative masonry-card overflow-hidden rounded-xl bg-[#111113] border border-zinc-800/80 hover:border-zinc-700 transition-colors shadow-none"
               >
               {/* Post content */}
                 <img
                   src={post.image}
                   alt={post.caption || "Post"}
-                  className="block h-auto w-full object-contain"
+                  className="block h-auto w-full object-contain bg-zinc-950"
+                  loading="lazy"
                 />
                 {post.caption && (
                   updatePostId === post._id ? (
-                    <div className="p-3">
+                    <div className="p-3 bg-[#18181b]">
                       <input
                         value={updatedCaptions}
                         onChange={(e) => setUpdatedCaptions(e.target.value)}
-                        className="w-full rounded bg-zinc-800 p-2 text-white"
+                        className="w-full rounded-lg bg-zinc-900 border border-zinc-700 p-2 text-xs text-white outline-none focus:border-zinc-400"
+                        placeholder="Edit caption..."
                       />
-
                       <div className="mt-2 flex gap-2">
                         <button
                           onClick={() => handleUpdate(post._id)}
-                          className="rounded bg-green-600 px-3 py-1"
+                          className="rounded-lg bg-white text-black px-3 py-1 text-xs font-semibold hover:bg-zinc-200 transition-colors"
                         >
                           Save
                         </button>
-
                         <button
                           onClick={() => {
                             setUpdatePostId(null);
                             setUpdatedCaptions("");
                           }}
-                          className="rounded bg-red-600 px-3 py-1"
+                          className="rounded-lg bg-[#27272a] text-zinc-300 px-3 py-1 text-xs hover:bg-zinc-700 transition-colors"
                         >
                           Cancel
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <p className="px-3 py-3 text-center text-sm leading-5 text-zinc-100 sm:text-base">
+                    <p className="px-3.5 py-3 text-sm text-zinc-200">
                       {post.caption}
                     </p>
                   )
@@ -142,27 +143,32 @@ const Feed = () => {
                   onClick={() =>
                     setMenuOpenId(menuOpenId === post._id ? null : post._id)
                   }
-                  className="absolute bottom-1 right-3 p-2 rounded  hover:bg-zinc-600 text-zinc-400"
+                  className="absolute bottom-2 right-2 p-1.5 rounded-lg bg-black/60 hover:bg-black/90 text-zinc-400 hover:text-white transition-colors"
+                  aria-label="Post actions"
                 >
-                  ⋮
+                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="12" cy="5" r="1.5" />
+                    <circle cx="12" cy="12" r="1.5" />
+                    <circle cx="12" cy="19" r="1.5" />
+                  </svg>
                 </button>
 
                 {/* Dropdown menu */}
                 {menuOpenId === post._id && (
-                  <div className="absolute bottom-12 right-3 w-32 rounded-md bg-zinc-800 shadow-lg">
+                  <div className="absolute bottom-10 right-2 w-28 rounded-lg bg-[#18181b] border border-zinc-800 shadow-xl overflow-hidden z-20 text-xs">
                     <button
                       onClick={() => {
                         setUpdatePostId(post._id);
                         setUpdatedCaptions(post.caption || "");
-                        setMenuOpenId(null); // Close the menu after clicking update
+                        setMenuOpenId(null);
                       }}
-                      className="block w-full px-3 py-2 text-left text-sm hover:bg-zinc-700"
+                      className="block w-full px-3 py-2 text-left text-zinc-300 hover:text-white hover:bg-zinc-800 transition-colors"
                     >
-                      Update
+                      Edit Caption
                     </button>
                     <button
                       onClick={() => handleDelete(post._id)}
-                      className="block w-full px-3 py-2 text-left text-sm hover:bg-zinc-700"
+                      className="block w-full px-3 py-2 text-left text-red-400 hover:text-red-300 hover:bg-zinc-800 transition-colors"
                     >
                       Delete
                     </button>
@@ -174,9 +180,10 @@ const Feed = () => {
         )}
 
         {!isLoading && !error && posts.length === 0 && (
-          <p className="py-16 text-center text-xl text-zinc-300">
-            No posts available.
-          </p>
+          <div className="py-24 text-center">
+            <p className="text-sm text-zinc-400 mb-1">No community posts yet.</p>
+            <p className="text-xs text-zinc-600">Be the first photographer to upload a shot!</p>
+          </div>
         )}
       </div>
     </main>

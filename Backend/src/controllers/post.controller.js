@@ -85,8 +85,11 @@ async function deletePost(req, res) {
             message: "You are not authorized to update this post",
         });
     }
-
-    await postModel.findByIdAndDelete(postId);
+    
+    if (post.imageFileId) {
+    await deleteFile(post.imageFileId);
+}
+await postModel.findByIdAndDelete(postId);
     res.status(200).json({
         message: "Post deleted successfully",
         post,

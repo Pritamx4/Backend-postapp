@@ -11,10 +11,17 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const app = express();
-app.use(cors( {
-    origin: process.env.FRONTEND_URL, // Replace with your frontend URL
-    credentials: true, // Allow cookies to be sent
-}));
+const allowedOrigins = [
+    "http://localhost:5173", // Vite local dev server
+    process.env.FRONTEND_URL, // Deployed Render URL
+].filter(Boolean);
+
+app.use(
+    cors({
+        origin: allowedOrigins,
+        credentials: true, // Cookie/JWT session allow karne ke liye
+    })
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -51,5 +58,14 @@ app.use("/api/users", userRoutes);
 
 // post routes
 app.use("/api/posts", postRoutes);
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+    console.error("Global Error Handler:", err.stack || err);
+    const statusCode = err.status || err.statusCode || 500;
+    res.status(statusCode).json({
+        message: err.message || "Internal Server Error",
+    });
+});
 
 module.exports = app;
