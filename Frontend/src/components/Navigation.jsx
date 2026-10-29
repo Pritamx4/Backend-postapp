@@ -31,7 +31,7 @@ const Navigation = () => {
     }, [location.pathname]);
 
     const handleLogout = async () => {
-        try { await axios.post(getApiUrl("/api/auth/logout")); } catch {}
+        try { await axios.post(getApiUrl("/api/auth/logout")); } catch (err) { console.error("Logout error:", err); }
         finally {
             localStorage.removeItem("isLoggedIn");
             setUser(null);
