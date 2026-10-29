@@ -23,6 +23,7 @@ const Navigation = () => {
                 if (isMounted) {
                     setUser(null);
                     localStorage.removeItem("isLoggedIn");
+                    localStorage.removeItem("token");
                 }
             }
         };
@@ -34,6 +35,7 @@ const Navigation = () => {
         try { await axios.post(getApiUrl("/api/auth/logout")); } catch (err) { console.error("Logout error:", err); }
         finally {
             localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("token");
             setUser(null);
             navigate("/auth?tab=login");
         }

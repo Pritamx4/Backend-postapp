@@ -11,14 +11,13 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const app = express();
-const allowedOrigins = [
-    "http://localhost:5173", // Vite local dev server
-    process.env.FRONTEND_URL, // Deployed Render URL
-].filter(Boolean);
 
 app.use(
     cors({
-        origin: allowedOrigins,
+        origin: (origin, callback) => {
+            // Allow all origins (local network mobile IPs, vercel, render, localhost) with credentials
+            callback(null, true);
+        },
         credentials: true, // Cookie/JWT session allow karne ke liye
     })
 );
@@ -36,18 +35,10 @@ app.get("/health", (req, res) => {
 });
 
 /**
- * ye jo apis hai in sab me hame ek prefix lagana
- * agar hamne auth.routes me jo apis banai hai unhe access krna hai to hame
- * "/api/auth" naam ka prefix lagana pdega
- * /api/auth/register
- * /api/auth/login
- * /api/auth/logout
- * or agar hamne user.routes me jo apis banai hai unhe access krna hai to hame
- * "/api/users" naam ka prefix lagana pdega
- * /api/users/me
- * /api/users/me/password
- * /api/users/me
- * /api/users/username/:username
+ * API route prefixes:
+ * /api/auth -> register, login, logout
+ * /api/users -> me, password, username
+ * /api/posts -> CRUD posts
  */
 
 // auth routes

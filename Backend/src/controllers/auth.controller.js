@@ -3,17 +3,19 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const bcrypt = require("bcrypt");
 
+const isProd = process.env.NODE_ENV === "production";
+
 async function registerUser(req, res) {
     const { username, email, password } = req.body;
 
     const isUserAlreadyExists = await userModel.findOne({
-    $or: [{ email }, { username }]
-});
-if (isUserAlreadyExists) {
-    return res.status(409).json({
-        message: isUserAlreadyExists.email === email ? "Email already registered" : "Username already taken",
+        $or: [{ email }, { username }],
     });
-}
+    if (isUserAlreadyExists) {
+        return res.status(409).json({
+            message: isUserAlreadyExists.email === email ? "Email already registered" : "Username already taken",
+        });
+    }
 
     const user = await userModel.create({
         username,
@@ -32,14 +34,16 @@ if (isUserAlreadyExists) {
         },
     );
 
-    res.cookie("token", token, {    
-    httpOnly: true,    
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: "lax",
-});
+    res.cookie("token", token, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, // 24 hours
+        sameSite: isProd ? "none" : "lax",
+        secure: isProd,
+    });
 
     res.status(201).json({
         message: "User registered successfully",
+        token,
         user: {
             username: user.username,
             email: user.email,
@@ -88,11 +92,13 @@ async function loginUser(req, res) {
     res.cookie("token", token, {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000, // 24 hours
-        sameSite: "lax",
+        sameSite: isProd ? "none" : "lax",
+        secure: isProd,
     });
 
     res.status(200).json({
         message: "Login successful",
+        token,
         user: {
             username: user.username,
             email: user.email,
@@ -101,7 +107,11 @@ async function loginUser(req, res) {
 }
 
 async function logoutUser(req, res) {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+        httpOnly: true,
+        sameSite: isProd ? "none" : "lax",
+        secure: isProd,
+    });
     res.status(200).json({
         message: "Logout successful",
     });
@@ -112,10 +122,3 @@ module.exports = {
     loginUser,
     logoutUser,
 };
-
-/**
- * these are the routes for auth related operations
- * post /register
- * post /login
- * post /logout
- */

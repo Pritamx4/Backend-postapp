@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
 import { getApiUrl } from "../config/api";
 import BrandIcon from "../components/BrandIcon";
 
@@ -35,14 +36,8 @@ const Auth = () => {
             ? { username: formData.username, email: formData.username.includes("@") ? formData.username : undefined, password: formData.password }
             : formData;
         try {
-            const response = await fetch(endpoint, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify(payload),
-            });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.message || "Request failed");
+            const res = await axios.post(endpoint, payload);
+            const data = res.data;
             if (isLogin) {
                 if (data.token) localStorage.setItem("token", data.token);
                 localStorage.setItem("isLoggedIn", "true");
@@ -54,7 +49,7 @@ const Auth = () => {
             }
         } catch (error) {
             setIsError(true);
-            setMessage(error.message || "Something went wrong.");
+            setMessage(error.response?.data?.message || error.message || "Authentication failed.");
         } finally {
             setLoading(false);
         }
