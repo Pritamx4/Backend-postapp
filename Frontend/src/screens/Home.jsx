@@ -10,9 +10,9 @@ const Home = () => {
                     viewBox="0 0 100 100"
                     fill="none"
                     stroke="currentColor"
-                    stroke-width="8"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
                 >
                     <path d="M30 20h40c5.5 0 10 4.5 10 10v40c0 5.5-4.5 10-10 10H30c-5.5 0-10-4.5-10-10V30c0-5.5 4.5-10 10-10z" />
                     <path d="M30 40l20 15 20-15" />
