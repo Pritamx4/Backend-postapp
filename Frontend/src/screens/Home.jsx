@@ -1,7 +1,27 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Home = () => {
     const navigate = useNavigate();
+// Check kre ki user authenticated hai ya nahi, agar authenticated hai to feed page pe redirect kar do
+    useEffect(() => {
+        const CheckAuth = async () => {
+            try {
+                const res = await axios.get("/api/users/me", {
+                    withCredentials: true, // ye ensure kare ki cookies bheji ja rahi hai
+                });
+                if (res.status === 200) {
+                    navigate("/feed");
+                    // console.log("User is authenticated, redirecting to feed.");
+                }
+            } catch (error) {
+                console.error("Auth Error:", error);
+            }
+        };
+        CheckAuth();
+    }, [navigate]);
+
     return (
         <div className="flex relative items-center justify-center h-screen bg-black text-white">
             <div className="h-12 w-12 absolute top-0 left-0 flex items-center justify-center rounded-full">
